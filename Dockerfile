@@ -4,12 +4,12 @@ FROM ubuntu:20.04 as base
 RUN \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        ca-certificates-java \
-        curl \
-        graphviz \
-        openjdk-8-jre-headless \
-        python3-distutils \
-        && \
+    ca-certificates-java \
+    curl \
+    graphviz \
+    openjdk-8-jre-headless \
+    python3-distutils \
+    && \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -41,12 +41,12 @@ RUN \
     curl -L -o coursier https://git.io/coursier-cli && \
     chmod +x coursier && \
     ./coursier \
-        bootstrap \
-        -r jitpack \
-        sh.almond:scala-kernel_$SCALA_VERSION:$ALMOND_VERSION \
-        --sources \
-        --default=true \
-        -o almond && \
+    bootstrap \
+    -r jitpack \
+    sh.almond:scala-kernel_$SCALA_VERSION:$ALMOND_VERSION \
+    --sources \
+    --default=true \
+    -o almond && \
     ./almond --install --global && \
     \rm -rf almond couriser /root/.cache/coursier 
 
@@ -60,7 +60,7 @@ FROM base as final
 COPY --from=intermediate-builder /coursier_cache/ /coursier_cache/
 COPY --from=intermediate-builder /usr/local/share/jupyter/kernels/scala/ /usr/local/share/jupyter/kernels/scala/
 
-RUN chown -R bootcamp:bootcamp /chisel-bootcamp
+RUN chown -R bootcamp:bootcamp /chisel-bootcamp /coursier_cache
 
 USER bootcamp
 WORKDIR /chisel-bootcamp
